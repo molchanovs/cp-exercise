@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using TodoList.Database;
+using TodoList.Services;
 
 namespace TodoList.Api.Controllers
 {
@@ -11,20 +12,19 @@ namespace TodoList.Api.Controllers
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
+        private readonly ITodoItemsService _todoItemsService;
         private readonly TodoContext _context;
-        private readonly ILogger<TodoItemsController> _logger;
 
-        public TodoItemsController(TodoContext context, ILogger<TodoItemsController> logger)
+        public TodoItemsController(ITodoItemsService todoItemsService)
         {
-            _context = context;
-            _logger = logger;
+            _todoItemsService = todoItemsService;
         }
 
         // GET: api/TodoItems
         [HttpGet]
         public async Task<IActionResult> GetTodoItems()
         {
-            var results = await _context.TodoItems.Where(x => !x.IsCompleted).ToListAsync();
+            var results = await _todoItemsService.Get();
             return Ok(results);
         }
 

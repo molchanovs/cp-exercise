@@ -1,6 +1,4 @@
-using System;
-
-namespace TodoList.Api
+namespace TodoList.Database
 {
     public class TodoItem
     {

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace TodoList.Api
+namespace TodoList.Database
 {
     public class TodoContext : DbContext
     {

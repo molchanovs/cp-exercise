@@ -20,6 +20,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TodoList.Database\TodoList.Database.csproj" />
+    <ProjectReference Include="..\TodoList.Models\TodoList.Models.csproj" />
+    <ProjectReference Include="..\TodoList.Services\TodoList.Services.csproj" />
   </ItemGroup> 
 
 </Project>

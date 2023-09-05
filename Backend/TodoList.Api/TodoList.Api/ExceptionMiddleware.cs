@@ -5,6 +5,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TodoList.Api.Controllers;
+using TodoList.Models;
 
 namespace TodoList.Api
 {
@@ -45,7 +46,4 @@ namespace TodoList.Api
             }
         }
     }
-
-    public class ApiException: Exception { }
-    public class NotFoundException: Exception { }
 }
