@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TodoList.Database;
+using TodoList.Models;
 using TodoList.Services;
 
 namespace TodoList.Api.Controllers
@@ -18,6 +21,7 @@ namespace TodoList.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<TodoItem>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTodoItems()
         {
             var results = await _todoItemsService.GetAll();
@@ -25,6 +29,8 @@ namespace TodoList.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ErrorMessage), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(TodoItem), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTodoItem(Guid id)
         {
             var result = await _todoItemsService.Get(id);
@@ -32,6 +38,9 @@ namespace TodoList.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ErrorMessage), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorMessage), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> PutTodoItem(Guid id, TodoItem todoItem)
         {
             await _todoItemsService.Update(id, todoItem);
@@ -39,6 +48,8 @@ namespace TodoList.Api.Controllers
         } 
 
         [HttpPost]
+        [ProducesResponseType(typeof(ErrorMessage), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> PostTodoItem(TodoItem todoItem)
         {
             await _todoItemsService.Add(todoItem);             
