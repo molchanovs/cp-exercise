@@ -9,7 +9,6 @@ namespace TodoList.Services
         Task<List<TodoItem>> GetAll(bool completed = false);
         Task<TodoItem> Get(Guid id);
         Task Update(Guid id, TodoItem item);
-
         Task Add(TodoItem item);
     }
 
@@ -80,10 +79,10 @@ namespace TodoList.Services
             return await _context.TodoItems.AnyAsync(x => x.Id == id);
         }
 
-        private async Task<bool> TodoItemDescriptionExists(string description)
+        private async Task<bool> TodoItemDescriptionExists(string description, bool isCompleted = false)
         {
             return await _context.TodoItems.
-                AnyAsync(x => x.Description.ToLowerInvariant() == description.ToLowerInvariant() && !x.IsCompleted);
+                AnyAsync(x => x.Description.ToLowerInvariant() == description.ToLowerInvariant() && x.IsCompleted == isCompleted);
         }
     }
 }
