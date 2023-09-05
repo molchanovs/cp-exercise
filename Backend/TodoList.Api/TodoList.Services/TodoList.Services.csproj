@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TodoList.Database\TodoList.Database.csproj" />
+    <ProjectReference Include="..\TodoList.Models\TodoList.Models.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using TodoList.Database;
 using TodoList.Services;
@@ -13,93 +11,38 @@ namespace TodoList.Api.Controllers
     public class TodoItemsController : ControllerBase
     {
         private readonly ITodoItemsService _todoItemsService;
-        private readonly TodoContext _context;
 
         public TodoItemsController(ITodoItemsService todoItemsService)
         {
             _todoItemsService = todoItemsService;
         }
 
-        // GET: api/TodoItems
         [HttpGet]
         public async Task<IActionResult> GetTodoItems()
         {
-            var results = await _todoItemsService.Get();
+            var results = await _todoItemsService.GetAll();
             return Ok(results);
         }
 
-        // GET: api/TodoItems/...
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTodoItem(Guid id)
         {
-            var result = await _context.TodoItems.FindAsync(id);
-
-            if (result == null)
-            {
-                return NotFound();
-            }
-
+            var result = await _todoItemsService.Get(id);
             return Ok(result);
         }
 
-        // PUT: api/TodoItems/... 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTodoItem(Guid id, TodoItem todoItem)
         {
-            if (id != todoItem.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(todoItem).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TodoItemIdExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _todoItemsService.Update(id, todoItem);
             return NoContent();
         } 
 
-        // POST: api/TodoItems 
         [HttpPost]
         public async Task<IActionResult> PostTodoItem(TodoItem todoItem)
         {
-            if (string.IsNullOrEmpty(todoItem?.Description))
-            {
-                return BadRequest("Description is required");
-            }
-            else if (TodoItemDescriptionExists(todoItem.Description))
-            {
-                return BadRequest("Description already exists");
-            } 
-
-            _context.TodoItems.Add(todoItem);
-            await _context.SaveChangesAsync();
-             
+            await _todoItemsService.Add(todoItem);             
             return CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.Id }, todoItem);
-        } 
-
-        private bool TodoItemIdExists(Guid id)
-        {
-            return _context.TodoItems.Any(x => x.Id == id);
-        }
-
-        private bool TodoItemDescriptionExists(string description)
-        {
-            return _context.TodoItems
-                   .Any(x => x.Description.ToLowerInvariant() == description.ToLowerInvariant() && !x.IsCompleted);
         }
     }
 }

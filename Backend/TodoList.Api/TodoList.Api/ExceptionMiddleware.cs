@@ -37,10 +37,11 @@ namespace TodoList.Api
                     _ => (int)HttpStatusCode.InternalServerError,
                 };
 
+                var message = httpContext.Response.StatusCode == (int)HttpStatusCode.InternalServerError ? "Oops, unexpected error. Please contact support." : ex.Message;
                 var response = JsonSerializer.Serialize(new
                 {
                     httpContext.Response.StatusCode,
-                    ex.Message
+                    Message = message
                 });
                 await httpContext.Response.WriteAsync(response);
             }
